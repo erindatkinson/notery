@@ -3,6 +3,7 @@
 from os import walk, stat
 from subprocess import run
 
+from jinja2 import Environment, DictLoader
 from frontmatter import load
 from fire import Fire
 from tabulate import tabulate
@@ -54,6 +55,24 @@ def get_all_notes(base:str)->list[str]:
         f.extend(test)
     return f
 
+def new_note(title:str, tags:str="", templatepath:str="./scripts/note.jinja2"):
+    """creates a new note template"""
+    filename = title
+    for char in ["/","_","(",")"," ", ":", "[","]"]:
+        filename = filename.replace(char, "-")
+
+    env = read_template(templatepath)
+    note = env.get_template("note.md").render(title=title, tags=str(tags).split(','))
+
+    with open(filename.lower()+".md", 'w', encoding="utf-8") as fp_out:
+        fp_out.write(note)
+
+def read_template(path:str):
+    """sets up the jinja environment"""
+    with open(path, encoding="utf-8") as fp:
+        tpl = fp.read()
+
+    return Environment(loader=DictLoader({"note.md": tpl}))
 
 def handle_title(title:str)->str:
     """deal with titles from tags"""
@@ -66,5 +85,6 @@ if __name__ == "__main__":
         "search": searcher,
         "tags": list_tags,
         "lint": linter,
-        "recent": recent
+        "recent": recent,
+        "new": new_note
         })

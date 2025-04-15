@@ -8,6 +8,16 @@ ifndef TAG
 	$(error TAG is not set)
 endif
 
+needs-tags:
+ifndef TAGS
+	$(error TAGS is not set)
+endif
+
+needs-name:
+ifndef NAME
+	$(error NAME is not set)
+endif
+
 ## setup:		installs prereqs for searching and exporting
 setup:
 	@brew bundle
@@ -28,6 +38,16 @@ all-tags:
 ## lint:		runs markdown lint on all files
 lint:
 	@pipenv run ./scripts/main.py lint
+
+recent:
+	@pipenv run ./scripts/main.py recent
+
+new: needs-name
+	@pipenv run ./scripts/main.py new "${NAME}"
+
+new-tagged: needs-name needs-tags
+	@pipenv run ./scripts/main.py new --tags ${TAGS} "${NAME}"
+
 
 ## help:		prints make target help information from comments in makefile.
 help: Makefile

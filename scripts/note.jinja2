@@ -1,0 +1,11 @@
+---
+title: {{ title }}
+{%- if tags | length > 0 %}
+tags:
+{%- endif %}
+{%- for tag in tags %}
+  - {{ tag}}
+{%- endfor%}
+---
+# {{ title }}
+
