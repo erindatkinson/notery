@@ -1,4 +1,4 @@
-# Notes
+# Notæry
 
 A notes setup for vscode and the terminal.
 
