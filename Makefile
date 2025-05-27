@@ -1,3 +1,4 @@
+# ------ Helper targets -------
 needs-file:
 ifndef FILE
 	$(error FILE is not set)
@@ -17,6 +18,8 @@ needs-name:
 ifndef NAME
 	$(error NAME is not set)
 endif
+
+# -------- actual targets -----------
 
 ## setup:		installs prereqs for searching and exporting
 setup:
@@ -39,18 +42,20 @@ all-tags:
 lint:
 	@pipenv run ./scripts/main.py lint
 
+## recent:	lists the most recently edited files
 recent:
 	@pipenv run ./scripts/main.py recent
 
+## new:		generates new doc from template
 new: needs-name
 	@pipenv run ./scripts/main.py new "${NAME}"
 
+## new-tagged:	generates new doc with tags from template
 new-tagged: needs-name needs-tags
 	@pipenv run ./scripts/main.py new --tags ${TAGS} "${NAME}"
-
 
 ## help:		prints make target help information from comments in makefile.
 help: Makefile
 	@sed -n 's/^##//p' $< | sort
 
-.phony: setup search all-tags xport-pdf help
+.phony: setup search all-tags lint new new-tagged xport-pdf help

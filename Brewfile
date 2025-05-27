@@ -1,3 +1,5 @@
+brew "agg"
+brew "asciinema"
 brew "pandoc"
 brew "pipenv"
 cask "mactex"
